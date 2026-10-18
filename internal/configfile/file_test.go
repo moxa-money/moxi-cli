@@ -77,4 +77,17 @@ func TestProfileAndContext(t *testing.T) {
 	if again.Profile != "studio" || again.Context != "lab" {
 		t.Fatalf("file = %+v", again)
 	}
+	if err := again.Set("integrations.cursor.enabled", "yes"); err == nil {
+		t.Fatal("cursor flag should accept only true or false")
+	}
+	if err := again.Set("integrations.cursor.enabled", "true"); err != nil {
+		t.Fatal(err)
+	}
+	got, err := Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !got.Integrations.Cursor.Enabled {
+		t.Fatal("cursor scaffold should be enabled")
+	}
 }

@@ -38,11 +38,16 @@ func newConfigCmd(st *State) *cobra.Command {
 				if err != nil {
 					return err
 				}
+				cursor := "false"
+				if st.File.Integrations.Cursor.Enabled {
+					cursor = "true"
+				}
 				view := map[string]string{
-					"config_dir": dir,
-					"profile":    st.Profile,
-					"context":    st.File.Context,
-					"output":     st.Output,
+					"config_dir":     dir,
+					"profile":        st.Profile,
+					"context":        st.File.Context,
+					"output":         st.Output,
+					"cursor_enabled": cursor,
 				}
 				if st.JSON() {
 					return output.JSON(cmd.OutOrStdout(), view)
@@ -52,6 +57,7 @@ func newConfigCmd(st *State) *cobra.Command {
 					{"profile", st.Profile},
 					{"context", st.File.Context},
 					{"output", st.Output},
+					{"cursor_enabled", cursor},
 				})
 			},
 		},
