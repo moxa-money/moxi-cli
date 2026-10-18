@@ -42,7 +42,7 @@ func newRoot() (*cobra.Command, error) {
 	root := &cobra.Command{
 		Use:           "moxi",
 		Short:         "Founder CLI",
-		Long:          "Local config, context, version, and help for a founder shell.\nAgents pass --output json. usage lists the flags they follow.",
+		Long:          "Local config, context, version, help, and setup checks for a founder shell.\nAgents pass --output json. usage lists the flags they follow.",
 		Version:       version.Line(),
 		SilenceUsage:  true,
 		SilenceErrors: true,
@@ -92,12 +92,14 @@ func newRoot() (*cobra.Command, error) {
 	root.AddCommand(
 		newConfigCmd(st),
 		newCtxCmd(st),
+		newSetupCmd(st),
 		newUsageCmd(st),
 		newVersionCmd(),
 	)
 	groups := map[string]string{
 		"config":  "local",
 		"ctx":     "local",
+		"setup":   "local",
 		"version": "local",
 		"usage":   "contract",
 	}

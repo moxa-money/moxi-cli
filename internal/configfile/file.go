@@ -15,10 +15,21 @@ import (
 // File is the on-disk founder config. It names a profile and a context label.
 // It does not store a cloud environment, an account id, or a credential.
 type File struct {
-	Profile  string   `yaml:"profile"`
-	Context  string   `yaml:"context"`
-	Output   string   `yaml:"output"`
-	Profiles []string `yaml:"profiles"`
+	Profile      string       `yaml:"profile"`
+	Context      string       `yaml:"context"`
+	Output       string       `yaml:"output"`
+	Profiles     []string     `yaml:"profiles"`
+	Integrations Integrations `yaml:"integrations,omitempty"`
+}
+
+// Integrations holds opt-in local tool switches. It does not hold a key.
+type Integrations struct {
+	Cursor CursorIntegration `yaml:"cursor,omitempty"`
+}
+
+// CursorIntegration is the editor scaffold switch.
+type CursorIntegration struct {
+	Enabled bool `yaml:"enabled"`
 }
 
 // Default is the file written by config init.
@@ -104,6 +115,8 @@ func (f *File) Get(key string) (string, error) {
 		return f.Context, nil
 	case "output":
 		return f.Output, nil
+	case "integrations.cursor.enabled":
+		return boolString(f.Integrations.Cursor.Enabled), nil
 	default:
 		return "", fmt.Errorf("unknown config key %q", key)
 	}
@@ -123,6 +136,12 @@ func (f *File) Set(key, value string) error {
 			return err
 		}
 		f.Context = label
+	case "integrations.cursor.enabled":
+		on, err := parseBool(value)
+		if err != nil {
+			return err
+		}
+		f.Integrations.Cursor.Enabled = on
 	default:
 		return fmt.Errorf("unknown config key %q", key)
 	}
@@ -203,4 +222,22 @@ func Label(s string) (string, error) {
 		return "", fmt.Errorf("name %q must start with a letter", s)
 	}
 	return s, nil
+}
+
+func boolString(v bool) string {
+	if v {
+		return "true"
+	}
+	return "false"
+}
+
+func parseBool(s string) (bool, error) {
+	switch s {
+	case "true":
+		return true, nil
+	case "false":
+		return false, nil
+	default:
+		return false, fmt.Errorf("integrations.cursor.enabled: want true or false")
+	}
 }
