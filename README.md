@@ -1,0 +1,14 @@
+# moxi-cli
+
+Moxi by Moxa. The install binary is `moxi`.
+
+Founder settings live in `~/.moxi` (`%USERPROFILE%\.moxi` on Windows). Set `MOXI_CONFIG_DIR` to use another directory.
+
+The open-source license is not chosen yet. See `LICENSE`.
+
+```
+go build -o moxi ./cmd/moxi
+go test ./...
+```
+
+`go install github.com/moxa-money/moxi-cli/cmd/moxi` installs the `moxi` binary.

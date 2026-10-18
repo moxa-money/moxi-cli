@@ -1,0 +1,7 @@
+/moxi
+/moxi.exe
+*.test
+*.out
+coverage.*
+.env
+*.local.yaml
