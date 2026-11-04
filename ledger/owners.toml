@@ -1,0 +1,6 @@
+# Workers are one word, up to 32 characters. The human operator in this
+# build is FOUNDER and owns no repo. Replace the names with the founder's.
+example-platform = PLATFORM
+example-app = APP
+example-site = LEAD
+ledger = LEAD

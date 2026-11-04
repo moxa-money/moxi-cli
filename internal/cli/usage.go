@@ -25,7 +25,7 @@ type UsageCommand struct {
 
 func localUsage() UsageDoc {
 	return UsageDoc{
-		Summary: "Founder-local commands. Settings live in the config directory. setup doctor checks this machine and cloud sign-in.",
+		Summary: "Founder-local commands. Settings live in the config directory. The ledger, desk, and dash read the local ledger. setup doctor checks this machine and cloud sign-in.",
 		Requires: []string{
 			"--output json for a machine-readable result",
 			"MOXI_CONFIG_DIR when the config root is not the default",
@@ -39,6 +39,10 @@ func localUsage() UsageDoc {
 			{Command: "version", Example: "moxi version"},
 			{Command: "setup doctor", Example: "moxi setup doctor"},
 			{Command: "setup cursor", Example: "moxi setup cursor --enable"},
+			{Command: "setup consent", Example: "moxi setup consent --plan plan.txt --cost cost.txt"},
+			{Command: "comms", Example: "moxi comms ready --json"},
+			{Command: "desk", Example: "moxi desk --output json"},
+			{Command: "dash", Example: "moxi dash"},
 			{Command: "help tree", Example: "moxi help tree"},
 		},
 	}

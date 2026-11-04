@@ -5,3 +5,14 @@
 coverage.*
 .env
 *.local.yaml
+ledger/target/
+ledger/data/*
+!ledger/data/.gitkeep
+ledger/signers/*
+!ledger/signers/README.md
+terraform/.terraform/
+terraform/**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!terraform/terraform.tfvars.example

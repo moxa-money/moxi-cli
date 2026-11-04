@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/moxa-money/moxi-cli/internal/configfile"
+	"github.com/moxa-money/moxi-cli/internal/consent"
 	"github.com/moxa-money/moxi-cli/internal/output"
 	"github.com/moxa-money/moxi-cli/internal/setup"
 )
@@ -46,8 +47,59 @@ func newSetupCmd(st *State) *cobra.Command {
 	cursorCmd.Flags().StringVar(&cursorDir, "dir", "", "target directory (default current directory)")
 	cursorCmd.Flags().BoolVar(&cursorEnable, "enable", false, "enable the editor scaffold in founder config and write it")
 
+	var planFile, costFile string
+	var approve bool
+	consentCmd := &cobra.Command{
+		Use:   "consent",
+		Short: "Canonicalize the plan and cost text",
+		Long:  "Print the digest of the plan summary and cost table.\n--approve stores a signature when the table incurs cost. A yes that does not sign that text is not an approval.",
+		Args:  cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			plan, err := os.ReadFile(planFile)
+			if err != nil {
+				return err
+			}
+			cost, err := os.ReadFile(costFile)
+			if err != nil {
+				return err
+			}
+			if approve {
+				result, err := consent.Approve(cmd.Context(), string(plan), string(cost))
+				if err != nil {
+					return err
+				}
+				if st.JSON() {
+					return output.JSON(cmd.OutOrStdout(), result)
+				}
+				fmt.Fprintf(cmd.OutOrStdout(), "digest  %s\nmethod  %s\nstatus  %s\n", result.Digest, result.Method, result.Status)
+				return nil
+			}
+			text, digest, err := consent.Canonical(string(plan), string(cost))
+			if err != nil {
+				return err
+			}
+			view := map[string]any{
+				"digest":      digest,
+				"incurs_cost": consent.IncursCost(string(cost)),
+				"status":      "canonical",
+				"bytes":       len(text),
+			}
+			if st.JSON() {
+				return output.JSON(cmd.OutOrStdout(), view)
+			}
+			fmt.Fprintf(cmd.OutOrStdout(), "digest  %s\ncost    %t\n", digest, view["incurs_cost"])
+			return nil
+		},
+	}
+	consentCmd.Flags().StringVar(&planFile, "plan", "", "plan summary file")
+	consentCmd.Flags().StringVar(&costFile, "cost", "", "cost table file")
+	consentCmd.Flags().BoolVar(&approve, "approve", false, "sign the canonical text when the table incurs cost")
+	_ = consentCmd.MarkFlagRequired("plan")
+	_ = consentCmd.MarkFlagRequired("cost")
+
 	cmd.AddCommand(
 		cursorCmd,
+		consentCmd,
 		&cobra.Command{
 			Use:   "doctor",
 			Short: "Check local tools and cloud sign-in",

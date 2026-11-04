@@ -16,12 +16,12 @@ func TestHelpTreeIsLocalContract(t *testing.T) {
 	}
 	tree := stdout.String()
 	names := commandNames(tree)
-	for _, name := range []string{"config", "ctx", "version", "usage", "help", "tree", "setup", "doctor", "cursor"} {
+	for _, name := range []string{"config", "ctx", "version", "usage", "help", "tree", "setup", "doctor", "cursor", "consent", "comms", "desk", "dash"} {
 		if !names[name] {
 			t.Fatalf("tree missing %s\n%s", name, tree)
 		}
 	}
-	for _, banned := range []string{"login", "desk", "comms", "signer", "ui", "dash", "rapid", "ping", "directory"} {
+	for _, banned := range []string{"login", "signer", "ui", "rapid", "ping", "directory", "health", "cost", "logs", "graph"} {
 		if names[banned] {
 			t.Fatalf("tree contains %s\n%s", banned, tree)
 		}
