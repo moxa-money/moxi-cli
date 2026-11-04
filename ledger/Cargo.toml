@@ -1,0 +1,29 @@
+[package]
+name = "comms"
+version = "0.1.0"
+edition = "2021"
+description = "Founder-local coordination ledger. Workers are named in owners.toml."
+publish = false
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "comms"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = "1"
+base64 = "0.22"
+chrono = { version = "0.4", default-features = false, features = ["clock", "std"] }
+clap = { version = "4", features = ["derive"] }
+comfy-table = "7"
+fs2 = "0.4"
+p256 = { version = "0.13", features = ["ecdsa"] }
+rusqlite = { version = "0.37", features = ["bundled"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+
+[dev-dependencies]
+tempfile = "3"

@@ -1,0 +1,14 @@
+name_prefix              = "example"
+environment              = "dev"
+region                   = "us-east-1"
+cidr_block               = "10.40.0.0/16"
+az_count                 = 2
+enable_nat               = true
+enable_public_ingress    = false
+enable_flow_logs         = true
+flow_log_retention_days  = 30
+
+tags = {
+  product = "moxi"
+  shell   = "identity-network-logs-encryption-runtime"
+}

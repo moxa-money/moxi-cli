@@ -42,7 +42,7 @@ func newRoot() (*cobra.Command, error) {
 	root := &cobra.Command{
 		Use:           "moxi",
 		Short:         "Founder CLI",
-		Long:          "Local config, context, version, help, and setup checks for a founder shell.\nAgents pass --output json. usage lists the flags they follow.",
+		Long:          "Founder shell: local config, the ledger, the desk, and setup checks.\nAgents pass --output json. usage lists the flags they follow.\nThe ledger binary is comms, built from ledger/.",
 		Version:       version.Line(),
 		SilenceUsage:  true,
 		SilenceErrors: true,
@@ -86,6 +86,8 @@ func newRoot() (*cobra.Command, error) {
 
 	root.AddGroup(
 		&cobra.Group{ID: "local", Title: "This machine:"},
+		&cobra.Group{ID: "ledger", Title: "Ledger:"},
+		&cobra.Group{ID: "screen", Title: "Screen:"},
 		&cobra.Group{ID: "contract", Title: "Agent contract:"},
 	)
 	root.SetHelpCommand(newHelpCmd())
@@ -93,6 +95,9 @@ func newRoot() (*cobra.Command, error) {
 		newConfigCmd(st),
 		newCtxCmd(st),
 		newSetupCmd(st),
+		newCommsCmd(),
+		newDeskCmd(st),
+		newDashCmd(st),
 		newUsageCmd(st),
 		newVersionCmd(),
 	)
@@ -101,6 +106,9 @@ func newRoot() (*cobra.Command, error) {
 		"ctx":     "local",
 		"setup":   "local",
 		"version": "local",
+		"comms":   "ledger",
+		"desk":    "screen",
+		"dash":    "screen",
 		"usage":   "contract",
 	}
 	for _, cmd := range root.Commands() {
