@@ -1,31 +1,46 @@
 # moxi-cli
 
-Alpha, untested release. This repository is public for grant review. It is not ready for use.
+Moxi is a founder shell you run on your own computer. It keeps your local settings, an empty ledger of plans and requests, and a desk you can read in the terminal or as a local page. It also includes an example of a closed cloud network you can plan in an AWS account you own.
 
-Agents helping a person set this up follow [docs/setup/operator.md](docs/setup/operator.md).
+You keep the accounts. The repository ships no key, no account id, and no filled ledger.
 
-The commands below are the Alpha surface. This repository has no roadmap.
+**Alpha, untested release.** This repository is public for grant review. It is not ready for use. There is no roadmap.
 
-Moxi by Moxa. The install binary is `moxi`.
+## What you need
 
-Founder settings live in `~/.moxi` (`%USERPROFILE%\.moxi` on Windows), in `config.yaml`. Set `MOXI_CONFIG_DIR` to use another directory.
+- Git, Go 1.24 or newer, and Rust with Cargo, to build `moxi` and the ledger.
+- Terraform 1.6 or newer, and the AWS provider 5 or newer, when you want to read the example plan.
+- An AWS account you control, and the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html). The check asks you to sign in yourself with `aws login`.
+- The [Google Cloud CLI](https://cloud.google.com/sdk/docs/install), and a Google Workspace where you are an admin. The check confirms you can read the directory. It stops at the first miss and prints one next step.
+- A Mac, only when you choose to approve a change that can cost money. That approval is the Mac biometric prompt.
 
-This build registers `config`, `ctx`, `version`, `usage`, `help` (including `help tree`), `setup` (`doctor`, `cursor`, `consent`), `comms`, `desk`, and `dash`. `ctx` stores a local label. It is not a cloud environment.
+Settings live in `~/.moxi/config.yaml` (`%USERPROFILE%\.moxi\config.yaml` on Windows). `MOXI_CONFIG_DIR` selects another directory. The person at the desk is `FOUNDER`.
 
-`comms` is the ledger in `ledger/`. It starts empty. Workers are named in `ledger/owners.toml`. The human at the desk is `FOUNDER` in this build and owns no repo. `moxi desk` prints the status line, the activity list, and the command cursor. `moxi dash` writes that same view to a local page.
+## Paid resources
 
-`ontology/mappings.md` is the type and predicate map for the shell and the ledger. `terraform/` is the generic shell: identity, a closed network, logs, encryption, and an empty place to run an app. Values start in `terraform/terraform.tfvars.example`. `tools/catalog.md` lists those surfaces. None of them ship a key or an account id.
+Reading the example plan does not create cloud resources. Applying it later can. The example can create a NAT gateway, a KMS key, CloudWatch log groups, VPC flow logs, and an empty ECS cluster. AWS bills those. Leave public ingress off unless you have decided otherwise. Do not point this example at a production account. State stays on your machine.
 
-`moxi setup doctor` checks the config file, the AWS CLI, GCP CLI, and sign-in for AWS, GCP, and Google Workspace. It stops at the first miss and prints one remediation. It does not print a token or an account id. `moxi setup cursor --enable` writes editor rules and an example MCP file. The example has no servers and no keys. `moxi setup consent` prints the digest of a plan summary and a cost table.
+A paid change needs `moxi setup consent` and a signature over that exact plan and cost table. A yes in chat is not an approval. This release cannot complete a paid signature without the Mac biometric.
 
-On a Mac, create the `Moxa Watchers` code-signing identity once in Keychain Access before a watcher app is signed. The steps are `docs/setup/moxa-watchers.md`. Setup does not create that certificate.
+## Where to go next
 
-The open-source license is the MIT License. See `LICENSE`.
+| You want | Read |
+|---|---|
+| To set it up with an agent | [docs/setup/operator.md](docs/setup/operator.md) |
+| The example network and how the files connect | [terraform/README.md](terraform/README.md) |
+| The ledger | [ledger/README.md](ledger/README.md) |
+| The tool list | [tools/catalog.md](tools/catalog.md) |
+| The type map | [ontology/mappings.md](ontology/mappings.md) |
+| A Mac code-signing identity for a later watcher app | [docs/setup/moxa-watchers.md](docs/setup/moxa-watchers.md) |
 
-```
+Agents follow [AGENTS.md](AGENTS.md). `moxi usage --output json` is the command list.
+
+```sh
 go build -o moxi ./cmd/moxi
 go test ./...
 cargo test --manifest-path ledger/Cargo.toml
 ```
 
-`go install github.com/moxa-money/moxi-cli/cmd/moxi@latest` installs the `moxi` binary once this repo is published.
+`go install github.com/moxa-money/moxi-cli/cmd/moxi@latest` installs the `moxi` binary.
+
+The license is the MIT License. See `LICENSE`.
