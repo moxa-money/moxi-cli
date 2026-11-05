@@ -1,5 +1,7 @@
 # Tools
 
+An agent walking a person through setup follows `docs/setup/operator.md`.
+
 Each row is a local tool. A credential stays on the founder's machine. This catalog has no key, no account id, and no filled vault.
 
 | Tool | Kind | Command or place | What it is for |
