@@ -1,6 +1,8 @@
 # moxi-cli
 
-Public Alpha. This repository is public for grant review. It is not ready for use.
+Alpha, untested release. This repository is public for grant review. It is not ready for use.
+
+Agents helping a person set this up follow [docs/setup/operator.md](docs/setup/operator.md).
 
 The commands below are the Alpha surface. This repository has no roadmap.
 
