@@ -33,7 +33,9 @@ module "identity" {
 }
 
 module "runtime" {
-  source      = "./modules/runtime"
-  name_prefix = var.name_prefix
-  environment = var.environment
+  source             = "./modules/runtime"
+  name_prefix        = var.name_prefix
+  environment        = var.environment
+  private_subnet_ids = module.network.private_subnet_ids
+  task_role_arn      = module.identity.task_role_arn
 }

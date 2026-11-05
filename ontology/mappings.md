@@ -51,3 +51,5 @@ Status on a node:
 | branch_of | git_branch | repository |
 
 The first sitting creates the `cloud_resource`, `iam_role`, `kms_key`, and empty runtime nodes. It does not create a `database_schema`.
+
+The example files for those wires are in `terraform/README.md`. The ledger root is `ledger/`. This map does not name an account.
