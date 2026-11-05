@@ -2963,7 +2963,7 @@ mod tests {
     #[test]
     fn dependency_order_and_replay() {
         let (dir, store) = fixture();
-        let infra = plan_file(dir.path(), "infra.md", "aurora");
+        let infra = plan_file(dir.path(), "infra.md", "example-database");
         let mobile = plan_file(dir.path(), "mobile.md", "chart");
         store
             .plan_open(
@@ -2972,7 +2972,7 @@ mod tests {
                 "example-platform".into(),
                 vec![],
                 "Sample history".into(),
-                vec!["aurora".into()],
+                vec!["schema".into()],
                 vec!["example-database".into()],
             )
             .unwrap();
@@ -2999,7 +2999,7 @@ mod tests {
                 record_id: 1,
                 parent_id: None,
                 kind: "close".into(),
-                body: "migration 009 applied".into(),
+                body: "schema step 2 applied".into(),
                 mentions: vec![],
                 status: Some("closed".into()),
                 blocked_by: None,
@@ -3036,7 +3036,7 @@ mod tests {
         let show = rebuilt.show("APP-16").unwrap();
         assert_eq!(show.owner, "APP");
         assert_eq!(show.record.depends_on, vec!["PLATFORM-15".to_string()]);
-        let hits = rebuilt.search("aurora").unwrap();
+        let hits = rebuilt.search("schema").unwrap();
         assert!(hits
             .iter()
             .any(|hit| hit.plan_ref.as_deref() == Some("PLATFORM-15")));
@@ -3133,8 +3133,8 @@ mod tests {
             .item_open(Op::ItemOpen {
                 plan_ref: "APP-16".into(),
                 repo: "example-app".into(),
-                worktree: Some("/tmp/wt-mob-16".into()),
-                branch: Some("chiron/mob-16".into()),
+                worktree: Some("/tmp/wt-app-16".into()),
+                branch: Some("sample/app-16".into()),
                 requesting_agent: "APP".into(),
                 requested_agent: "PLATFORM".into(),
                 summary: "Implement the chart".into(),
@@ -3147,8 +3147,8 @@ mod tests {
                 record_id: event.id,
                 parent_id: None,
                 kind: "block".into(),
-                body: "history route is still the old alias".into(),
-                mentions: vec!["networth-get-history".into()],
+                body: "sample route still uses the prior name".into(),
+                mentions: vec!["sample-read-history".into()],
                 status: Some("blocked".into()),
                 blocked_by: Some("PLATFORM-15".into()),
                 clear_blocked_by: false,
@@ -3172,7 +3172,7 @@ mod tests {
         assert_eq!(show.owner, "APP");
         assert_eq!(show.record.blocked_by.as_deref(), Some("PLATFORM-15"));
         assert_eq!(show.actions.len(), 1);
-        let hits = store.search("networth-get-history").unwrap();
+        let hits = store.search("sample-read-history").unwrap();
         assert_eq!(hits[0].record_id, 2);
     }
 
@@ -4413,22 +4413,22 @@ mod tests {
                 DeskNeed {
                     urgency: Some(2),
                     category: Some("cost".into()),
-                    title: Some("Aurora sizing".into()),
-                    why: Some("Prod is closed.".into()),
+                    title: Some("Database sizing".into()),
+                    why: Some("The paid tier is closed.".into()),
                     ..DeskNeed::default()
                 },
             )
             .unwrap();
         let open = store.messages(None, Some("FOUNDER"), None, false).unwrap();
         assert_eq!(open[0].desk.urgency, Some(2));
-        assert_eq!(open[0].desk.title.as_deref(), Some("Aurora sizing"));
-        let (signature, signer, public_key) = sign_founder(sent[0].id, "ack", "0.5 ACU", "", "did");
+        assert_eq!(open[0].desk.title.as_deref(), Some("Database sizing"));
+        let (signature, signer, public_key) = sign_founder(sent[0].id, "ack", "small tier", "", "did");
         let event = store
             .answer(
                 sent[0].id,
                 "FOUNDER".into(),
                 "ack".into(),
-                "0.5 ACU".into(),
+                "small tier".into(),
                 None,
                 Some("did".into()),
                 vec![],
@@ -4754,14 +4754,14 @@ mod tests {
                 path,
                 "example-platform".into(),
                 vec![],
-                "Aurora".into(),
+                "Example database".into(),
                 vec![],
                 vec![],
             )
             .unwrap();
         let spoke = DeskNeed {
             for_founder: true,
-            link: vec!["2128".into()],
+            link: vec!["example-plans/setup.md".into()],
             ..DeskNeed::default()
         };
         let err = store
@@ -4780,7 +4780,7 @@ mod tests {
         assert!(err.to_string().contains("orchestrator"), "{err}");
         let spoke = DeskNeed {
             for_founder: true,
-            link: vec!["2128".into()],
+            link: vec!["example-plans/setup.md".into()],
             ..DeskNeed::default()
         };
         let sent = store
@@ -5019,8 +5019,8 @@ mod tests {
     #[test]
     fn the_signed_event_matches_the_desk() {
         assert_eq!(
-            answer_event(1501, "ack", "0.5 ACU, no reader", "PLATFORM", "did"),
-            r#"{"id":1501,"agent":"FOUNDER","kind":"ack","body":"0.5 ACU, no reader","to":"PLATFORM","outcome":"did"}"#
+            answer_event(1501, "ack", "small tier, no reader", "PLATFORM", "did"),
+            r#"{"id":1501,"agent":"FOUNDER","kind":"ack","body":"small tier, no reader","to":"PLATFORM","outcome":"did"}"#
         );
         assert_eq!(
             answer_event(9, "ack", "Essentials", "", "did"),
