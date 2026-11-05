@@ -880,7 +880,7 @@ mod tests {
                 record_id: 1,
                 parent_id: None,
                 kind: "note".into(),
-                body: "aurora still on migration 008".into(),
+                body: "example database still on schema step 1".into(),
                 mentions: vec!["PLATFORM-15".into()],
                 status: None,
                 blocked_by: None,
