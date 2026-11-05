@@ -1,5 +1,9 @@
 # moxi-cli
 
+Public Alpha. This repository is public for grant review. It is not ready for use.
+
+The commands below are the Alpha surface. This repository has no roadmap.
+
 Moxi by Moxa. The install binary is `moxi`.
 
 Founder settings live in `~/.moxi` (`%USERPROFILE%\.moxi` on Windows), in `config.yaml`. Set `MOXI_CONFIG_DIR` to use another directory.
