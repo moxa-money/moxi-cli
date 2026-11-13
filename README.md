@@ -33,7 +33,7 @@ A paid change needs `moxi setup consent` and a signature over that exact plan an
 | The type map | [ontology/mappings.md](ontology/mappings.md) |
 | A Mac code-signing identity for a later watcher app | [docs/setup/moxa-watchers.md](docs/setup/moxa-watchers.md) |
 
-Agents follow [AGENTS.md](AGENTS.md). `moxi usage --output json` is the command list.
+Agents follow [AGENTS.md](AGENTS.md). `moxi usage --output json` is the command list. The Moxa desk `moxa` defaults to `{shape, views.json}`; rows are `views.json.rows`; `moxa ui` needs `--output tui`; `moxa strategy get` lists every strategy.
 
 ```sh
 go build -o moxi ./cmd/moxi

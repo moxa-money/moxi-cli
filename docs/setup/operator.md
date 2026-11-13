@@ -10,6 +10,7 @@ The sitting ends when the local config exists, `moxi setup doctor` is clean or s
 
 - Run `moxi usage --output json` before inventing a flag. The registered commands are `config`, `ctx`, `version`, `usage`, `help`, `setup`, `comms`, `desk`, and `dash`.
 - Pass `--output json` on `moxi`. Pass `--json` on `comms`.
+- The Moxa desk `moxa` defaults to `{shape, views.json}`. Rows are `views.json.rows`. `moxa ui` needs `--output tui`. `moxa strategy get` lists every strategy when `--id` is omitted. `moxi` does not wrap `shape` and `views`.
 - Run `moxi setup doctor` after each fix. It stops at the first failed check and prints one remediation. Do the remediation, then run it again.
 - Keep secrets out of the chat, the ledger, and any commit. That includes account ids, access tokens, `terraform.tfvars`, `terraform.tfstate`, and `ledger/data/events.jsonl`.
 - Leave `terraform apply` unrun. A plan is the end of the cloud step in this release.
